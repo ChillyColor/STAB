@@ -31,10 +31,10 @@ export default function Sidebar() {
     {
       label: "My Sessions",
       icon: <FaCalendarAlt />,
-      href: "#",
+      href: "/teacher/sessions",
       active: false,
     },
-    { label: "Booking Requests", icon: <FaBook />, href: "/teacher/session", active: false },
+    { label: "Booking Requests", icon: <FaBook />, href: "/teacher/booking", active: false },
     { label: "Settings", icon: <FaCog />, href: "#", active: false },
   ];
 

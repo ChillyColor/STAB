@@ -190,6 +190,23 @@ app.get("/api/getbooking", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+app.get("/api/getSessions", async (req, res) => {
+  const currentUser = req.headers["teacher_id"];
+  try {
+    const result = await db.query(
+      `SELECT u.id, u.name, u.email, a.appointment_time,a.message
+       FROM appointments a
+       JOIN users u ON a.student_id = u.id
+       WHERE a.teacher_id = $1 AND a.status='approved'`,
+      [currentUser]
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Database error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+);
 
 app.get("/api/teacher", async (req, res) => {
   try {

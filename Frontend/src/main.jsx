@@ -12,7 +12,8 @@ import Student from "./pages/sDashboard.jsx";
 import Home from "./components/StudentComponents/Home.jsx";
 import Card from "./components/StudentComponents/Teachers.jsx";
 import Thome from "./components/TeacherComponents/Thome.jsx";
-import Session from "./components/TeacherComponents/Tsession.jsx"
+import Booking from "./components/TeacherComponents/Tbookings.jsx";
+import Sessions from "./components/TeacherComponents/TSessions.jsx";
 
 const router = createBrowserRouter([
   {
@@ -40,8 +41,12 @@ const router = createBrowserRouter([
         element: <Thome />,
       },
       {
-        path: "session",
-        element: <Session />,
+        path: "booking",
+        element: <Booking />,
+      },
+      {
+        path:"sessions",
+        element: <Sessions/>
       },
     ],
   },
@@ -61,7 +66,5 @@ const router = createBrowserRouter([
   },
 ]);
 createRoot(document.getElementById("root")).render(
-
-    <RouterProvider router={router} />
-
+  <RouterProvider router={router} />
 );

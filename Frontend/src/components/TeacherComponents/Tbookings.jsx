@@ -1,7 +1,7 @@
 import React from "react";
 import { useUser } from "../../pages/tDashboard";
 import axios from "axios";
-export default function Session() {
+export default function Booking() {
   const [students, setStudents] = React.useState([]);
   const user = useUser();
   React.useEffect(() => {
@@ -16,18 +16,19 @@ export default function Session() {
       .catch((err) => console.log(err));
   }, []);
   function handleClick(status, id) {
-   
     axios
       .put("http://localhost:5000/api/updateStatus", {
         sid: id,
         tid: user.id,
-        status: status
+        status: status,
       })
       .then(() => {
         setStudents((prevStudents) =>
           prevStudents.filter((student) => student.id !== id)
         );
-         status==='approved'?alert("Request Approved"):alert("Request Rejected")
+        status === "approved"
+          ? alert("Request Approved")
+          : alert("Request Rejected");
       })
       .catch((err) => {
         console.error("Update error:", err);
@@ -38,7 +39,7 @@ export default function Session() {
     <main className="flex-1 p-6 bg-gray-50 min-h-screen">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800">Sessions</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Booking Requests</h1>
         <div className="text-sm sm:text-right text-gray-600 mt-2 sm:mt-0">
           <p className="text-base">Today's Date</p>
           <p className="text-lg font-semibold text-gray-700">
