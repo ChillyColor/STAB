@@ -1,5 +1,5 @@
 import React from "react";
-import { useUser } from "../../pages/tDashboard";
+import Teacher, { useUser } from "../../pages/tDashboard";
 import axios from "axios";
 
 
@@ -16,8 +16,8 @@ export default function Thome() {
       })
       .then((res) => setTeacherData(res.data))
       .catch((err) => console.log(err));
+      console.log("Teacher Data:", teacherData);
   }, []);
-
   return (
     <main className="flex-1 p-6 bg-gray-50 min-h-screen">
       {/* Header Section */}
@@ -85,7 +85,7 @@ export default function Thome() {
             <thead className="bg-gray-100 text-sm text-gray-700">
               <tr>
                 {[
-                  "Appoint. Number",
+                  "Appoint Number",
                   "Session Title",
                   "Student",
                   "Scheduled Date & Time",
@@ -100,12 +100,16 @@ export default function Thome() {
               </tr>
             </thead>
             <tbody className="text-sm text-gray-800">
-              <tr className="hover:bg-gray-50 transition">
-                <td className="py-3 px-4 border-b">1</td>
-                <td className="py-3 px-4 border-b">Doubt Clarification</td>
-                <td className="py-3 px-4 border-b">Test Student</td>
-                <td className="py-3 px-4 border-b">2050-01-01 18:00</td>
-              </tr>
+              {teacherData.appointments?.map((app,index)=>(
+                <tr key={index} className="hover:bg-gray-50 transition">
+                  <td className="py-3 px-4 border-b">{app.id}</td>
+                  <td className="py-3 px-4 border-b">{app.message}</td>
+                  <td className="py-3 px-4 border-b">{app.student_id}</td>
+                  <td className="py-3 px-4 border-b">
+                    {new Date(app.appointment_time).toLocaleString()}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </section>

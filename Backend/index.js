@@ -147,6 +147,7 @@ app.get("/validate-session", (req, res) => {
 });
 app.get("/api/getTeacherData", async (req, res) => {
   const currentUser = req.headers["teacher_id"];
+
   try {
     const pending = await db.query(
       "SELECT COUNT(*) FROM appointments WHERE teacher_id=$1 AND status=$2 ",
@@ -163,11 +164,15 @@ app.get("/api/getTeacherData", async (req, res) => {
       [currentUser, "approved"]
     );
     const todaySession = today.rows[0].count;
-
+    const appointData= await db.query(
+      "SELECT * FROM appointments  WHERE teacher_id=$1 AND status=$2 ORDER BY appointment_time ASC LIMIT 3",
+      [currentUser, "approved"]
+    );
     res.status(200).json({
       pending: parseInt(pendingCount, 10),
       accepted: parseInt(approvedCount, 10),
       current: parseInt(todaySession, 10),
+      appointments: appointData.rows,
     });
   } catch (err) {
     console.error("Database Failure: ", err);
