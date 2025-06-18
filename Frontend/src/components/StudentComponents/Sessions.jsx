@@ -1,26 +1,30 @@
-import React from "react";
-import { useUser } from "../../pages/tDashboard";
+import React, { useEffect, useState } from "react";
+import { useUser } from "../../pages/sDashboard";
 import axios from "axios";
 
-export default function Sessions() {
-  const [sessions, setSessions] = React.useState([]);
-  const user = useUser();
-
-  const startSession = (sessionId) => {
-    axios
-      .post("http://localhost:5000/api/startSession", { sessionId }, { withCredentials: true })
-      .then(() => alert("Session started!"))
-      .catch((err) => console.error("Error starting session:", err));
-  };
+export default function Session() {
+  const  user  = useUser(); // Ensure this returns user object properly
+  const [sessions, setSessions] = useState([]);
+  console.log(user.id)
+  
 
   const postponeSession = (sessionId) => {
     axios
-      .post("http://localhost:5000/api/postponeSession", { sessionId }, { withCredentials: true })
+      .post(
+        "http://localhost:5000/api/postponeSession",
+        { sessionId },
+        { withCredentials: true }
+      )
       .then(() => alert("Session postponed."))
       .catch((err) => console.error("Error postponing session:", err));
   };
 
-  React.useEffect(() => {
+  const startSession = (sessionId) => {
+    alert(`Starting session with ID: ${sessionId}`);
+    // Add your navigation or logic here
+  };
+
+  useEffect(() => {
     if (!user?.id) return;
 
     axios
@@ -34,7 +38,7 @@ export default function Sessions() {
       .then((response) => setSessions(response.data))
       .catch((error) => console.error("Error fetching sessions:", error));
   }, [user?.id]);
-
+  console.log(sessions);
   return (
     <main className="flex-1 p-6 bg-gray-50 min-h-screen">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 max-w-6xl mx-auto">
@@ -76,7 +80,7 @@ export default function Sessions() {
                   className="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={() => startSession(session.id)}
                 >
-                  ▶ Start Session
+                  ▶ Join Session
                 </button>
 
                 <button

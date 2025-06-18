@@ -14,6 +14,7 @@ import Card from "./components/StudentComponents/Teachers.jsx";
 import Thome from "./components/TeacherComponents/Thome.jsx";
 import Booking from "./components/TeacherComponents/Tbookings.jsx";
 import Sessions from "./components/TeacherComponents/TSessions.jsx";
+import Session from "./components/StudentComponents/Sessions.jsx";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "teachers",
         element: <Card />,
+      },
+      {
+        path: "sessions",
+        element: <Session />,
       },
     ],
   },

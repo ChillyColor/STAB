@@ -16,7 +16,7 @@ export default function Sidebar({data}) {
     {
       label: "Scheduled Sessions",
       icon: <FaCalendarAlt />,
-      href: "#",
+      href: "/student/sessions",
       active: false,
     },
     { label: "My Bookings", icon: <FaBook />, href: "#", active: false },

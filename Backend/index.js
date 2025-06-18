@@ -164,7 +164,7 @@ app.get("/api/getTeacherData", async (req, res) => {
       [currentUser, "approved"]
     );
     const todaySession = today.rows[0].count;
-    const appointData= await db.query(
+    const appointData = await db.query(
       "SELECT * FROM appointments  WHERE teacher_id=$1 AND status=$2 ORDER BY appointment_time ASC LIMIT 3",
       [currentUser, "approved"]
     );
@@ -196,22 +196,34 @@ app.get("/api/getbooking", async (req, res) => {
   }
 });
 app.get("/api/getSessions", async (req, res) => {
-  const currentUser = req.headers["teacher_id"];
+  const currentUser = req.headers["user_id"];
+  const userRole = req.headers["role"];
+
   try {
-    const result = await db.query(
-      `SELECT u.id, u.name, u.email, a.appointment_time,a.message
+    let result;
+    if (userRole === "Teacher") {
+      result = await db.query(
+        `SELECT u.id, u.name, u.email, a.appointment_time,a.message
        FROM appointments a
        JOIN users u ON a.student_id = u.id
        WHERE a.teacher_id = $1 AND a.status='approved'`,
-      [currentUser]
-    );
+        [currentUser]
+      );
+    } else {
+      result = await db.query(
+        `SELECT u.id, u.name, u.email, a.appointment_time, a.message
+     FROM appointments a
+     JOIN users u ON a.teacher_id = u.id
+     WHERE a.student_id = $1 AND a.status = 'approved'`,
+        [currentUser]
+      );
+    }
     res.status(200).json(result.rows);
   } catch (err) {
     console.error("Database error:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
-);
+});
 
 app.get("/api/teacher", async (req, res) => {
   try {
@@ -224,16 +236,19 @@ app.get("/api/teacher", async (req, res) => {
     res.send(500).json({ message: "Server Error" });
   }
 });
-app.put("/api/updateStatus",async(req,res)=>{
-  const {sid,tid,status}=req.body
-  try{
-    await db.query("UPDATE appointments SET status=$1 WHERE teacher_id=$2 AND student_id=$3",[status,tid,sid]);
-    res.status(200).json({message:"Status Updated"})
-  }catch(err){
-    console.error("Database Error:",err);
-    res.send(500)
+app.put("/api/updateStatus", async (req, res) => {
+  const { sid, tid, status } = req.body;
+  try {
+    await db.query(
+      "UPDATE appointments SET status=$1 WHERE teacher_id=$2 AND student_id=$3",
+      [status, tid, sid]
+    );
+    res.status(200).json({ message: "Status Updated" });
+  } catch (err) {
+    console.error("Database Error:", err);
+    res.send(500);
   }
-})
+});
 app.post("/logout", (req, res) => {
   res.clearCookie("token");
   return res.status(200).json({ message: "Logged out successfully" });

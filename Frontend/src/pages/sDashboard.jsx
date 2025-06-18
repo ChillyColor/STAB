@@ -17,6 +17,7 @@ export default function StudentDashboard() {
       setUserData(user);
     }
   }
+
   React.useEffect(() => {
     if (userData?.role && userData.role !== "Student") {
       navigate("/login");
